@@ -44,17 +44,26 @@ This action will fail if that cell is already marked.
 
 
 // First, define a 'cell' to be a pair of numbers, between 0 and 2. i.e. (0,0) , (0,1), (0,2) ... (2,2).
-
 isCoordinate(0).
 isCoordinate(1).
 isCoordinate(2).
-
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
-symbol(S). // We decide whether our agent is x or o
+// Define the three possible states of each cell
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
-my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,x).
-opponent_piece(X,Y) :- isCell(X,Y) & mark(X,Y,o).
+my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,symbol(S)).
+opponent_piece(X,Y) :- not available(X,Y) & not my_piece(X,Y).
+
+// Define the eight diagonals
+// isDiagonal(A,B,C,D) :- isCell(A,B) & isCell(C,D) & isCell(E,F).
+isDiagonal(0,0,1,0,2,0).
+isDiagonal(0,1,1,1,2,1).
+isDiagonal(0,2,1,2,2,2).
+isDiagonal(0,0,0,1,0,2).
+isDiagonal(1,0,1,1,1,2).
+isDiagonal(0,0,1,0).
+isDiagonal(0,0,1,0).
+isDiagonal(0,0,1,0).
 
 
 
