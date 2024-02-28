@@ -73,9 +73,9 @@ started.
 */
 +round(Z) : next <- .findall(available(X,Y),available(X,Y),AvailableCells);
 						L = .length(AvailableCells);
-						N = math.floor(math.random(L));
-						.nth(N,AvailableCells,available(A,B));
-						 play(A,B).
+						//N = math.floor(math.random(L));
+						.nth(0,AvailableCells,available(A,B));
+							play(A,B).
 
 						 
 						 
