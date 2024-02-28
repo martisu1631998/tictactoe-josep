@@ -54,6 +54,8 @@ isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
 /* A cell is 'available' if it does not contain a mark.*/
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
+my_piece(X,Y) :- isCell(X,Y) & mark(X,Y, symbol(S)) //myPlayer's piece is in a cell with its symbol assigned at the beginning
+opponent_piece(X, Y) :- not available(X,Y) & not my_piece(X,Y) //opponent's piece is in a cell and is not myPlayer's piece
 
 
 started.
