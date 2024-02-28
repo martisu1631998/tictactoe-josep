@@ -15,7 +15,7 @@ MAS tic_tac_toe_game {
     environment: ticTacToe.SingleGameEnvironment()
 
     agents: randomPlayer;
-            myPlayer;
+            josep;
 
 
     aslSourcePath: "src/agt";
