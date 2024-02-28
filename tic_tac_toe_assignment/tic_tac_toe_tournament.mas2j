@@ -30,7 +30,7 @@ MAS tic_tac_toe_tournament {
     environment: ticTacToe.TournamentEnvironment(4,2) /*4 agents and 2 repetitions*/
 	
     agents: randomPlayer #2;   /* Run 2 instances of randomPlayer.*/
-    		myPlayer 	#2;	   /* Run 2 instances of myPlayer.*/
+    		josep 	#2;	   /* Run 2 instances of myPlayer.*/
            
     aslSourcePath: "src/agt";
 }
