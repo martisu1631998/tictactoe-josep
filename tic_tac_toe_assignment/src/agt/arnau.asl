@@ -1,4 +1,3 @@
-
 /*
 
 Implementation of a Tic-Tac-Toe player that just plays random moves.
@@ -52,7 +51,7 @@ isCoordinate(2).
 
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
-symbol(x). // We decide whether our agent is x or o
+symbol(S). // We decide whether our agent is x or o
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
 my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,x).
 opponent_piece(X,Y) :- isCell(X,Y) & mark(X,Y,o).
