@@ -55,6 +55,10 @@ isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 /* A cell is 'available' if it does not contain a mark.*/
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
 
+/* */
+
+// 
+directWin(X,Y) :- available(X,Y) & 
 
 started.
 
@@ -73,11 +77,12 @@ started.
 */
 +round(Z) : next <- .findall(available(X,Y),available(X,Y),AvailableCells);
 						L = .length(AvailableCells);
+						//!sayGibberish;
 						//N = math.floor(math.random(L));
 						.nth(0,AvailableCells,available(A,B));
 							play(A,B).
 
-						 
+//+!sayGibberish <- .print("gibberish")
 						 
 /* If I am the winner, then print "I won!"  */
 +winner(S) : symbol(S) <- .print("I won!").
