@@ -32,3 +32,9 @@ beersInFridge(10).
 /* Plans */
 +thirsty : beersInFridge(X) & X > 0 <- walkToFridge; getFromFridge(beer).
 
+(es poden fer totes les tipiques expressions, oju q unequal es \== per alguna raó)
+
+
+RULES
+
+
