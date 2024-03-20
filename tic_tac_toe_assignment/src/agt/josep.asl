@@ -20,6 +20,7 @@ Each turn the agent will observe the following percepts:
 	Since this will be changing each round, it can be used by the agent as a trigger to start the plan to determine
 	its next move.
 
+
 Furthermore, the agent may also observe the following:
 
 - next 
@@ -80,15 +81,21 @@ started.
 						 play(A,B).
 */
 +round(Z) : next <- .findall(available(X,Y), available(X,Y), AvailableCells);
+	L = .length(AvailableCells);
+	N = 0;
+	while (N < L) {.print("AA estic en un loop!");
+					N = N + 1};
 	// !playToWin;
 	// !playToNotLose;
 	!playMiddle.
-	
-// !playToWin : 
+
+// !playToWin <- if (available(0,0)){
+// 	if (mark())
+// }
 
 // !playToNotLose : 
 
-+!playMiddle <- if(available(1,1)){
++!playMiddle <- if (available(1,1)){
 					play(1,1);
 				}//.print("Middle was available!")}
 				else {!playCorner}.
