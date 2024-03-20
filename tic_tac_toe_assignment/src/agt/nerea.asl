@@ -71,15 +71,32 @@ started.
 	- pick the N-th cell of the list, and store its coordinates in the variables A and B.
 	- mark that cell by performing the action play(A,B).
 */
-+round(Z) : next <- .findall(available(X,Y),available(X,Y),AvailableCells);
-						L = .length(AvailableCells);
-						N = math.floor(math.random(L));
-						.nth(N,AvailableCells,available(A,B));
-						 play(A,B).
++round(Z) : next <- .findall(available(X,Y), available(X,Y), AvailableCells);
+	// !playToWin;
+	// !playToNotLose;
+	!playMiddle.
+	
+!playToWin : 
 
-						 
+// !playToNotLose : 
+
++!playMiddle <- if (available(1,1)){play(1,1);
+				}//.print("Middle was available!")}
+				else {!playCorner}.
+
++!playCorner <- if (available(0,0)) {play(0,0)} else{
+	if (available(2,0)) {play(2,0)} else{
+	if (available(0,2)) {play(0,2)} else{
+	if (available(2,2)) {play(2,2)} else{
+	!playEdge
+	}}}}.
+
++!playEdge <- if (available(1,0)) {play(1,0)} else{
+	if (available(0,1)) {play(0,1)} else{
+	if (available(2,1)) {play(2,1)} else{
+	if (available(1,2)) {play(1,2)} }}}.
 						 
 /* If I am the winner, then print "I won!"  */
 +winner(S) : symbol(S) <- .print("I won!").
 
-+end <- confirmEnd.
++end <- confirmEnd.
