@@ -51,11 +51,9 @@ isCoordinate(1).
 isCoordinate(2).
 
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
-isRow(X) :- 
 
 /* A cell is 'available' if it does not contain a mark.*/
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
-
 
 started.
 
@@ -78,7 +76,6 @@ started.
 						.nth(0,AvailableCells,available(A,B));
 							play(A,B).
 
-+!sayGibberish: .print("gibberish").
 						 
 /* If I am the winner, then print "I won!"  */
 +winner(S) : symbol(S) <- .print("I won!").
