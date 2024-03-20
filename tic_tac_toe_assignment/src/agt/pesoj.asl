@@ -1,7 +1,7 @@
 
 /*
 
-Implementation of our Tic-Tac-Toe player.
+Implementation of the evil version of our Tic-Tac-Toe player.
 
 When the agent is started it must first perform a 'sayHello' action.
 Once all agents have done this, the game or tournament starts.
@@ -85,8 +85,7 @@ started.
 
 // !playToNotLose : 
 
-+!playMiddle <- if(available(1,1)){
-					play(1,1);
++!playMiddle <- if (available(1,1)){play(1,1);
 				}//.print("Middle was available!")}
 				else {!playCorner}.
 
