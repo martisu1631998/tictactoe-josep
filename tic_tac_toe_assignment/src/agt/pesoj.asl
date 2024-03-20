@@ -1,7 +1,7 @@
 
 /*
 
-Implementation of a Tic-Tac-Toe player that just plays random moves.
+Implementation of the evil version of our Tic-Tac-Toe player.
 
 When the agent is started it must first perform a 'sayHello' action.
 Once all agents have done this, the game or tournament starts.
@@ -50,18 +50,13 @@ isCoordinate(0).
 isCoordinate(1).
 isCoordinate(2).
 
+
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
 /* A cell is 'available' if it does not contain a mark.*/
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
-my_piece(X,Y) :- isCell(X,Y) & mark(X,Y, symbol(S)). //myPlayer's piece is in a cell with its symbol assigned at the beginning
-opponent_piece(X, Y) :- not available(X,Y) & not my_piece(X,Y). //opponent's piece is in a cell and is not myPlayer's piece
-
-//Define diagonals
-isDiagonal() :- isCell(0,0) & isCell(0,1) & isCell(0,2).
 
 started.
-
 
 /* Plans */
 
@@ -74,13 +69,19 @@ started.
 	- pick a random integer N between 0 and L.
 	- pick the N-th cell of the list, and store its coordinates in the variables A and B.
 	- mark that cell by performing the action play(A,B).
+
++round(Z) : next <- .findall(available(X,Y),available(X,Y),AvailableCells);
+						L = .length(AvailableCells);
+						N = math.floor(math.random(L));
+						.nth(N,AvailableCells,available(A,B));
+						 play(A,B).
 */
 +round(Z) : next <- .findall(available(X,Y), available(X,Y), AvailableCells);
 	// !playToWin;
 	// !playToNotLose;
 	!playMiddle.
 	
-!playToWin : 
+// !playToWin : 
 
 // !playToNotLose : 
 
@@ -103,4 +104,4 @@ started.
 /* If I am the winner, then print "I won!"  */
 +winner(S) : symbol(S) <- .print("I won!").
 
-+end <- confirmEnd.
++end <- confirmEnd.
