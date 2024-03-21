@@ -51,19 +51,14 @@ isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
 // Define the three possible states of each cell
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
-my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,symbol(S)).
+my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,S) & symbol(S).
 opponent_piece(X,Y) :- not available(X,Y) & not my_piece(X,Y).
 
+cellValue(X,Y,Z) :- 
+
 // Define the eight diagonals
-// isDiagonal(A,B,C,D) :- isCell(A,B) & isCell(C,D) & isCell(E,F).
-isDiagonal(0,0,1,0,2,0).
-isDiagonal(0,1,1,1,2,1).
-isDiagonal(0,2,1,2,2,2).
-isDiagonal(0,0,0,1,0,2).
-isDiagonal(1,0,1,1,1,2).
-isDiagonal(0,0,1,0).
-isDiagonal(0,0,1,0).
-isDiagonal(0,0,1,0).
+isDiagonal(0,0,1,0) :- isCell(0,0) & isCell(1,0) & isCell(2,0).
+
 
 
 
