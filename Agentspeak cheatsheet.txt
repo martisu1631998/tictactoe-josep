@@ -1,0 +1,40 @@
+PLANS:
+
+/* Initial Beliefs */
+started.
+
+/* Plans: trigger_event <- body*/
++started <- .print(“hello world!”).
+
+-itRains <- .print(“It has stopped raining!”).
+
+ADDING ACHIEVEMENT GOALS:
+
+/* Initial Beliefs */
+started.
+/* Plans */
++started <- .print(“I’m thirsty!”);!getBeer;.print(“done!”).
++!getBeer <- .print(“getting beer!”).
+
+PREDICATES:
+
+/* Initial Beliefs */
+tall(john)
+likes(john, music)
+likes(john, pizza)
+/* Plans */
++likes(X,Y) <- .print(X, “likes”, Y).
+
+CONTEXTS:
+
+/* Initial Beliefs */
+beersInFridge(10). 
+/* Plans */
++thirsty : beersInFridge(X) & X > 0 <- walkToFridge; getFromFridge(beer).
+
+(es poden fer totes les tipiques expressions, oju q unequal es \== per alguna raó)
+
+
+RULES
+
+
