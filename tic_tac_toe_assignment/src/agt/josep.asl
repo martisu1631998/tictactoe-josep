@@ -56,9 +56,6 @@ isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
 symbol(x). // We decide whether our agent is x or o
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
-my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,x).
-opponent_piece(X,Y) :- isCell(X,Y) & mark(X,Y,o).
-
 
 started.
 
