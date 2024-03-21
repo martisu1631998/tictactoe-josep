@@ -54,10 +54,11 @@ isCoordinate(2).
 
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
-isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
-
-/* A cell is 'available' if it does not contain a mark.*/
+symbol(x). // We decide whether our agent is x or o
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
+my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,x).
+opponent_piece(X,Y) :- isCell(X,Y) & mark(X,Y,o).
+
 
 started.
 
@@ -79,7 +80,23 @@ started.
 						.nth(N,AvailableCells,available(A,B));
 						 play(A,B).
 */
-+round(Z) : next <- 
++round(Z) : next <- .findall(available(X,Y), available(X,Y), AvailableCells);
+	L = .length(AvailableCells);
+	N = 0;
+	!playToWin.
+	// !playToNotLose;
+	// !playMiddle.
+
++!playToWin : N < L <- C = .nth(N, AvailableCells, available(A,B));
+							if (A == 0 & B == 0) {
+								!checkWin00
+							} else {
+								.print("(0,0) was previously used");
+								N = N + 1;
+								!playToWin
+							}.
++!playToWin : N == L <- !playMiddle.
+
 // !playToNotLose : 
 
 +!playMiddle <- if (available(1,1)){
