@@ -54,7 +54,52 @@ isCoordinate(2).
 
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
-isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
+// Define the three possible states of each cell
+available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
+my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,S) & symbol(S).
+opponent_piece(X,Y) :- isCell(X,Y) & not available(X,Y) & not my_piece(X,Y).
+
+
+// More complex rules:
+
+// Returns true if a cell is in a winning position
+horizontalWinner(X,Y) :- available(X,Y) & ((my_piece(X,Y+1) & my_piece(X,Y+2)) | 
+									       (my_piece(X,Y-1) & my_piece(X,Y-2)) |
+										   (my_piece(X,Y+1) & my_piece(X,Y-1))).
+
+verticalWinner(X,Y) :- available(X,Y) & ((my_piece(X+1,Y) & my_piece(X+2,Y)) | 
+									     (my_piece(X-1,Y) & my_piece(X-2,Y)) |
+										 (my_piece(X+1,Y) & my_piece(X-1,Y))).
+
+rightDiagonalWinner(X,Y) :- available(X,Y) & ((my_piece(X+1, Y+1) & my_piece(X+2, Y+2)) |
+											  (my_piece(X-1, Y-1) & my_piece(X+1, Y+1)) |
+											  (my_piece(X-1, Y-1) & my_piece(X-2, Y-2))).
+
+leftDiagonalWinner(X,Y) :- available(X,Y) & ((my_piece(X+1, Y-1) & my_piece(X+2, Y-2)) |
+											 (my_piece(X-1, Y+1) & my_piece(X+1, Y+1)) |
+											 (my_piece(X-1, Y+1) & my_piece(X-2, Y+2))).
+
+winner(X,Y) :- horizontalWinner | verticalWinner | rightDiagonalWinner | leftDiagonalWinner.
+
+
+// Returns true if a cell is in a position to avoid a loss
+horizontalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X,Y+1) & opponent_piece(X,Y+2)) | 
+									      (opponent_piece(X,Y-1) & opponent_piece(X,Y-2)) |
+										  (opponent_piece(X,Y+1) & opponent_piece(X,Y-1))).
+
+verticalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X+1,Y) & opponent_piece(X+2,Y)) | 
+									    (opponent_piece(X-1,Y) & opponent_piece(X-2,Y)) |
+										(opponent_piece(X+1,Y) & opponent_piece(X-1,Y))).
+
+rightDiagonalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X+1, Y+1) & opponent_piece(X+2, Y+2)) |
+											 (opponent_piece(X-1, Y-1) & opponent_piece(X+1, Y+1)) |
+											 (opponent_piece(X-1, Y-1) & opponent_piece(X-2, Y-2))).
+
+leftDiagonalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X+1, Y-1) & opponent_piece(X+2, Y-2)) |
+											(opponent_piece(X-1, Y+1) & opponent_piece(X+1, Y+1)) |
+											(opponent_piece(X-1, Y+1) & opponent_piece(X-2, Y+2))).
+
+saver(X,Y) :- horizontalSaver | verticalSaver | rightDiagonalSaver | leftDiagonalSaver.
 
 
 started.
@@ -77,12 +122,19 @@ started.
 						.nth(N,AvailableCells,available(A,B));
 						 play(A,B).
 */
-+round(Z) : next <- 
-// !playToNotLose : 
++round(Z) : next <- .findall(winner(X,Y), winner(X,Y), possibleWins);
+					N_winners = .length(possibleWins);
+					if (N_winners > 0) {.nth(0, possibleWins, winner(A,B)); play(A,B)}
+					else {!playSafe}.
 
++!playSafe <- .findall(saver(X,Y), saver(X,Y), possibleSaves);
+			  N_savers = .length(possibleSaves);
+			  if (N_savers > 0) {.nth(0, possibleSaves, saver(A,B)); play(A,B)}
+			  else {!playMiddle}.
+					
 +!playMiddle <- if (available(1,1)){
 					play(1,1);
-				}//.print("Middle was available!")}
+				.print("Middle was available!")}
 				else {!playCorner}.
 
 +!playCorner <- if (available(0,0)) {play(0,0)} else{
@@ -97,7 +149,6 @@ started.
 	if (available(2,1)) {play(2,1)} else{
 	if (available(1,2)) {play(1,2)} }}}.
 
-+!CheckWin00 <- .print("I'm checking 0,0"); !playMiddle.
 						 
 /* If I am the winner, then print "I won!"  */
 +winner(S) : symbol(S) <- .print("I won!").
