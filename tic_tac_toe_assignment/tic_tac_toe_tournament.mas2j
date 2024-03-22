@@ -27,10 +27,10 @@ MAS tic_tac_toe_tournament {
 	 *	- In general, with m agents and n repetitions the total number of games is n * m * (m-1).
 	 *	 
 	 */
-    environment: ticTacToe.TournamentEnvironment(4,2) /*4 agents and 2 repetitions*/
+    environment: ticTacToe.TournamentEnvironment(8,4) /*4 agents and 2 repetitions*/
 	
-    agents: randomPlayer #2;   /* Run 2 instances of randomPlayer.*/
-    		arnau 	#2;	   /* Run 2 instances of myPlayer.*/
+    agents: josep #4;   /* Run 2 instances of randomPlayer.*/
+    		arnau 	#4;	   /* Run 2 instances of myPlayer.*/
            
     aslSourcePath: "src/agt";
 }
