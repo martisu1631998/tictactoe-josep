@@ -63,43 +63,49 @@ opponent_piece(X,Y) :- isCell(X,Y) & not available(X,Y) & not my_piece(X,Y).
 // More complex rules:
 
 // Returns true if a cell is in a winning position
-horizontalWinner(X,Y) :- available(X,Y) & ((my_piece(X,Y+1) & my_piece(X,Y+2)) | 
-									       (my_piece(X,Y-1) & my_piece(X,Y-2)) |
-										   (my_piece(X,Y+1) & my_piece(X,Y-1))).
+horizontalWinner(X,Y) :- available(X,Y) & (my_piece(X,Y+1) & my_piece(X,Y+2)).
+horizontalWinner(X,Y) :- available(X,Y) & (my_piece(X,Y-1) & my_piece(X,Y-2)).
+horizontalWinner(X,Y) :- available(X,Y) & (my_piece(X,Y+1) & my_piece(X,Y-1)).
 
-verticalWinner(X,Y) :- available(X,Y) & ((my_piece(X+1,Y) & my_piece(X+2,Y)) | 
-									     (my_piece(X-1,Y) & my_piece(X-2,Y)) |
-										 (my_piece(X+1,Y) & my_piece(X-1,Y))).
+verticalWinner(X,Y) :- available(X,Y) & (my_piece(X+1,Y) & my_piece(X+2,Y)).
+verticalWinner(X,Y) :- available(X,Y) & (my_piece(X-1,Y) & my_piece(X-2,Y)).
+verticalWinner(X,Y) :- available(X,Y) & (my_piece(X+1,Y) & my_piece(X-1,Y)).
 
-rightDiagonalWinner(X,Y) :- available(X,Y) & ((my_piece(X+1, Y+1) & my_piece(X+2, Y+2)) |
-											  (my_piece(X-1, Y-1) & my_piece(X+1, Y+1)) |
-											  (my_piece(X-1, Y-1) & my_piece(X-2, Y-2))).
+rightDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X+1, Y+1) & my_piece(X+2, Y+2)).
+rightDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y-1) & my_piece(X+1, Y+1)).
+rightDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y-1) & my_piece(X-2, Y-2)).
 
-leftDiagonalWinner(X,Y) :- available(X,Y) & ((my_piece(X+1, Y-1) & my_piece(X+2, Y-2)) |
-											 (my_piece(X-1, Y+1) & my_piece(X+1, Y+1)) |
-											 (my_piece(X-1, Y+1) & my_piece(X-2, Y+2))).
+leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X+1, Y-1) & my_piece(X+2, Y-2)).
+leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y+1) & my_piece(X+1, Y+1)).
+leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y+1) & my_piece(X-2, Y+2)).
 
-winner(X,Y) :- horizontalWinner | verticalWinner | rightDiagonalWinner | leftDiagonalWinner.
+winner(X,Y) :- horizontalWinner(X,Y).
+winner(X,Y) :- verticalWinner(X,Y).
+winner(X,Y) :- rightDiagonalWinner(X,Y).
+winner(X,Y) :- leftDiagonalWinner(X,Y).
 
 
 // Returns true if a cell is in a position to avoid a loss
-horizontalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X,Y+1) & opponent_piece(X,Y+2)) | 
-									      (opponent_piece(X,Y-1) & opponent_piece(X,Y-2)) |
-										  (opponent_piece(X,Y+1) & opponent_piece(X,Y-1))).
+horizontalSaver(X,Y) :- available(X,Y) & (opponent_piece(X,Y+1) & opponent_piece(X,Y+2)).
+horizontalSaver(X,Y) :- available(X,Y) & (opponent_piece(X,Y-1) & opponent_piece(X,Y-2)).
+horizontalSaver(X,Y) :- available(X,Y) & (opponent_piece(X,Y+1) & opponent_piece(X,Y-1)).
 
-verticalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X+1,Y) & opponent_piece(X+2,Y)) | 
-									    (opponent_piece(X-1,Y) & opponent_piece(X-2,Y)) |
-										(opponent_piece(X+1,Y) & opponent_piece(X-1,Y))).
+verticalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1,Y) & opponent_piece(X+2,Y)).
+verticalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1,Y) & opponent_piece(X-2,Y)).
+verticalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1,Y) & opponent_piece(X-1,Y)).
 
-rightDiagonalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X+1, Y+1) & opponent_piece(X+2, Y+2)) |
-											 (opponent_piece(X-1, Y-1) & opponent_piece(X+1, Y+1)) |
-											 (opponent_piece(X-1, Y-1) & opponent_piece(X-2, Y-2))).
+rightDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1, Y+1) & opponent_piece(X+2, Y+2)).
+rightDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y-1) & opponent_piece(X+1, Y+1)).
+rightDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y-1) & opponent_piece(X-2, Y-2)).
 
-leftDiagonalSaver(X,Y) :- available(X,Y) & ((opponent_piece(X+1, Y-1) & opponent_piece(X+2, Y-2)) |
-											(opponent_piece(X-1, Y+1) & opponent_piece(X+1, Y+1)) |
-											(opponent_piece(X-1, Y+1) & opponent_piece(X-2, Y+2))).
+leftDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1, Y-1) & opponent_piece(X+2, Y-2)).
+leftDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y+1) & opponent_piece(X+1, Y+1)).
+leftDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y+1) & opponent_piece(X-2, Y+2)).
 
-saver(X,Y) :- horizontalSaver | verticalSaver | rightDiagonalSaver | leftDiagonalSaver.
+saver(X,Y) :- horizontalSaver(X,Y).
+saver(X,Y) :- verticalSaver(X,Y).
+saver(X,Y) :- rightDiagonalSaver(X,Y).
+saver(X,Y) :-leftDiagonalSaver(X,Y).
 
 
 started.
@@ -109,28 +115,25 @@ started.
 /* When the agent is started, perform the 'sayHello' action. */
 +started <- sayHello.
 
-/* Whenever it is my turn, play a random move. Specifically:
-	- find all available cells and put them in a list called AvailableCells.
-	- Get the length L of that list.
-	- pick a random integer N between 0 and L.
-	- pick the N-th cell of the list, and store its coordinates in the variables A and B.
-	- mark that cell by performing the action play(A,B).
+/* Whenever it is my turn, look for winning positions. If there are none, look for positions
+ to avoid a loss, and if there are none either, play if possible (in this order of preference): 
+ middle, corner, edge.*/
 
-+round(Z) : next <- .findall(available(X,Y),available(X,Y),AvailableCells);
-						L = .length(AvailableCells);
-						N = math.floor(math.random(L));
-						.nth(N,AvailableCells,available(A,B));
-						 play(A,B).
-*/
 +round(Z) : next <- .findall(winner(X,Y), winner(X,Y), possibleWins);
 					N_winners = .length(possibleWins);
-					if (N_winners > 0) {.nth(0, possibleWins, winner(A,B)); play(A,B)}
+					if (N_winners > 0) {
+						.print("I see a possible win!");
+						.nth(0, possibleWins, winner(A,B));
+						play(A,B)}
 					else {!playSafe}.
 
 +!playSafe <- .findall(saver(X,Y), saver(X,Y), possibleSaves);
 			  N_savers = .length(possibleSaves);
-			  if (N_savers > 0) {.nth(0, possibleSaves, saver(A,B)); play(A,B)}
-			  else {!playMiddle}.
+			  if (N_savers > 0) {
+				  .print("I see a possible loss!");
+				  .nth(0, possibleSaves, saver(A,B));
+				  play(A,B)}
+			else {!playMiddle}.
 					
 +!playMiddle <- if (available(1,1)){
 					play(1,1);
