@@ -54,11 +54,31 @@ isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
 /* A cell is 'available' if it does not contain a mark.*/
 available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
+
 my_piece(X,Y) :- isCell(X,Y) & mark(X,Y, symbol(S)). //myPlayer's piece is in a cell with its symbol assigned at the beginning
 opponent_piece(X, Y) :- not available(X,Y) & not my_piece(X,Y). //opponent's piece is in a cell and is not myPlayer's piece
 
-//Define diagonals
-isDiagonal() :- isCell(0,0) & isCell(0,1) & isCell(0,2).
+
+mark(X, Y, symbol(S)) :- isCell(X, Y) & symbol(S). // cell is marked with a particular symbol
+cellValue(X,Y,1) :- isCell(X,Y) & my_piece(X,Y). // a cell that is occupied by my_piece it will be assigned 1
+cellValue(X,Y,-1) :- isCell(X,Y) & opponent_piece(X,Y). // cell that is occupied by opponent_piece is -1
+cellValue(X,Y,0) :- isCell(X,Y) & available(X,Y).
+
+//Define the different three in a row. We will call them diagonals.
+//Horizontals
+isDiagonal1(Value1, Value2, Value3) :- cellValue(0,0,Value1) & cellValue(0,1,Value2) & cellValue(0,2,Value3).
+isDiagonal2(Value1, Value2, Value3) :- cellValue(1,0,Value1) & cellValue(1,1,Value2) & cellValue(1,2,Value3).
+isDiagonal1(Value1, Value2, Value3) :- cellValue(2,0,Value1) & cellValue(2,1,Value2) & cellValue(2,2,Value3).
+
+//Verticals
+isDiagonal4(Value1, Value2, Value3) :- cellValue(0,0,Value1) & cellValue(1,0,Value2) & cellValue(2,0,Value3).
+isDiagonal5(Value1, Value2, Value3) :- cellValue(1,0,Value1) & cellValue(1,1,Value2) & cellValue(1,2,Value3).
+isDiagonal6(Value1, Value2, Value3) :- cellValue(2,0,Value1) & cellValue(2,1,Value2) & cellValue(2,2,Value3).
+
+//Diagonals
+isDiagonal7(Value1, Value2, Value3) :- cellValue(0,0,Value1) & cellValue(1,1,Value2) & cellValue(2,2,Value3).
+isDiagonal8(Value1, Value2, Value3) :- cellValue(0,2,Value1) & cellValue(1,1,Value2) & cellValue(2,0,Value3).
+
 
 started.
 
@@ -81,10 +101,26 @@ started.
 	!playMiddle.
 	
 !playToWin : 
+	if (isDiagonal1(1,1,0)) {play(())}
+//!playToNotLose : 
+!selectDiagonal:
+	if (Diagonal=1){checkValues(isDiagonal1)} else{
+		if(Diagonal=2){checkValues(isDiagonal2)} else{
+			if(Diagonal=3){checkValues(isDiagonal3)} else{
+				if(Diagonal=4){checkValues(isDiagonal4)} else{
+					if(Diagonal=5){checkValues(isDiagonal5)}else{
+						if(Diagonal=6){checkValues(isDiagonal6)}else{
+							if(Diagonal=7){checkValues(isDiagonal7)}else{
+								checkValues(isDiagonal8)
+							}}}}}}}.
 
-// !playToNotLose : 
+!checkValues(diagonal):
+	if (Value1 = 1) & (Value2 = 1) & (Value3 = 0){
+		
+	}
 
-+!playMiddle <- if (available(1,1)){play(1,1);
+
++!playMiddle <- if (available(1,1)){play(1,1)
 				}//.print("Middle was available!")}
 				else {!playCorner}.
 
