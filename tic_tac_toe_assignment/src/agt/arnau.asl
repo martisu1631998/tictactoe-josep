@@ -54,7 +54,9 @@ available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
 my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,S) & symbol(S).
 opponent_piece(X,Y) :- not available(X,Y) & not my_piece(X,Y).
 
-cellValue(X,Y,Z) :- 
++!scoreDiagonal <- available(0,0) + available(0,1) + available(0,2)
+
+
 
 // Define the eight diagonals
 isDiagonal(0,0,1,0) :- isCell(0,0) & isCell(1,0) & isCell(2,0).
