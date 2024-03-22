@@ -56,8 +56,6 @@ isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
-/* A cell is 'available' if it does not contain a mark.*/
-available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
 
 started.
 
