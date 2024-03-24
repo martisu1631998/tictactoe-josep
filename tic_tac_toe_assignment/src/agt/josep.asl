@@ -75,39 +75,6 @@ rightDiagonal(X,Y) :- available(X,Y) & coincide(X+1,Y+1,X+2,Y+2).
 rightDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y-1,X+1,Y+1).
 rightDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y-1,X-2,Y-2).
 
-leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X+1, Y-1) & my_piece(X+2, Y-2)).
-leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y+1) & my_piece(X+1, Y+1)).
-leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y+1) & my_piece(X-2, Y+2)).
-
-win(X,Y) :- horizontalWinner(X,Y).
-win(X,Y) :- verticalWinner(X,Y).
-win(X,Y) :- rightDiagonalWinner(X,Y).
-win(X,Y) :- leftDiagonalWinner(X,Y).
-
-
-// Returns true if a cell is in a position to avoid a loss
-horizontalSaver(X,Y) :- available(X,Y) & (opponent_piece(X,Y+1) & opponent_piece(X,Y+2)).
-horizontalSaver(X,Y) :- available(X,Y) & (opponent_piece(X,Y-1) & opponent_piece(X,Y-2)).
-horizontalSaver(X,Y) :- available(X,Y) & (opponent_piece(X,Y+1) & opponent_piece(X,Y-1)).
-
-verticalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1,Y) & opponent_piece(X+2,Y)).
-verticalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1,Y) & opponent_piece(X-2,Y)).
-verticalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1,Y) & opponent_piece(X-1,Y)).
-
-rightDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1, Y+1) & opponent_piece(X+2, Y+2)).
-rightDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y-1) & opponent_piece(X+1, Y+1)).
-rightDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y-1) & opponent_piece(X-2, Y-2)).
-
-leftDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X+1, Y-1) & opponent_piece(X+2, Y-2)).
-leftDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y+1) & opponent_piece(X+1, Y+1)).
-leftDiagonalSaver(X,Y) :- available(X,Y) & (opponent_piece(X-1, Y+1) & opponent_piece(X-2, Y+2)).
-
-saver(X,Y) :- horizontalSaver(X,Y).
-saver(X,Y) :- verticalSaver(X,Y).
-saver(X,Y) :- rightDiagonalSaver(X,Y).
-saver(X,Y) :-leftDiagonalSaver(X,Y).
-
-
 leftDiagonal(X,Y) :- available(X,Y) & coincide(X+1,Y-1,X+2,Y-2).
 leftDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y+1,X+1,Y+1).
 leftDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y+1,X-2,Y+2).
