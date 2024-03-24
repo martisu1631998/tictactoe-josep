@@ -1,3 +1,4 @@
+
 /*
 
 Implementation of our Tic-Tac-Toe player.
@@ -44,10 +45,13 @@ This action will fail if that cell is already marked.
 /* Initial beliefs and rules */
 
 
-// First, define a 'cell' to be a pair of numbers, between 0 and 2. i.e. (0,0) , (0,1), (0,2) ... (2,2)
+// First, define a 'cell' to be a pair of numbers, between 0 and 2. i.e. (0,0) , (0,1), (0,2) ... (2,2).
+
 isCoordinate(0).
 isCoordinate(1).
 isCoordinate(2).
+
+
 isCell(X,Y) :- isCoordinate(X) & isCoordinate(Y).
 
 // Define the three possible states of each cell
@@ -55,25 +59,21 @@ available(X,Y) :- isCell(X,Y) & not mark(X,Y,_).
 my_piece(X,Y) :- isCell(X,Y) & mark(X,Y,S) & symbol(S).
 opponent_piece(X,Y) :- isCell(X,Y) & not available(X,Y) & not my_piece(X,Y).
 
-// Check if two cells have the same state
-coincide(H,O,L,A) :- (my_piece(H,O) & my_piece(L,A)) | (opponent_piece(H,O) & opponent_piece(L,A)).
 
-/* Returns true if a cell is in a critical position, where the agent can either win or lose in the next turn 
-It checks all the valid three-in-a-row structures */
-// Horizontal row
-horizontal(X,Y) :- available(X,Y) & coincide(X,Y+1,X,Y+2).
-horizontal(X,Y) :- available(X,Y) & coincide(X,Y-1,X,Y-2).
-horizontal(X,Y) :- available(X,Y) & coincide(X,Y+1,X,Y-1).
+// More complex rules:
 
-// Vertical row
-vertical(X,Y) :- available(X,Y) & coincide(X+1,Y,X+2,Y).
-vertical(X,Y) :- available(X,Y) & coincide(X-1,Y,X-2,Y).
-vertical(X,Y) :- available(X,Y) & coincide(X+1,Y,X-1,Y).
+// Returns true if a cell is in a winning position
+horizontalWinner(X,Y) :- available(X,Y) & (my_piece(X,Y+1) & my_piece(X,Y+2)).
+horizontalWinner(X,Y) :- available(X,Y) & (my_piece(X,Y-1) & my_piece(X,Y-2)).
+horizontalWinner(X,Y) :- available(X,Y) & (my_piece(X,Y+1) & my_piece(X,Y-1)).
 
-// Diagonal row
-rightDiagonal(X,Y) :- available(X,Y) & coincide(X+1,Y+1,X+2,Y+2).
-rightDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y-1,X+1,Y+1).
-rightDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y-1,X-2,Y-2).
+verticalWinner(X,Y) :- available(X,Y) & (my_piece(X+1,Y) & my_piece(X+2,Y)).
+verticalWinner(X,Y) :- available(X,Y) & (my_piece(X-1,Y) & my_piece(X-2,Y)).
+verticalWinner(X,Y) :- available(X,Y) & (my_piece(X+1,Y) & my_piece(X-1,Y)).
+
+rightDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X+1, Y+1) & my_piece(X+2, Y+2)).
+rightDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y-1) & my_piece(X+1, Y+1)).
+rightDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y-1) & my_piece(X-2, Y-2)).
 
 leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X+1, Y-1) & my_piece(X+2, Y-2)).
 leftDiagonalWinner(X,Y) :- available(X,Y) & (my_piece(X-1, Y+1) & my_piece(X+1, Y+1)).
@@ -108,24 +108,9 @@ saver(X,Y) :- rightDiagonalSaver(X,Y).
 saver(X,Y) :-leftDiagonalSaver(X,Y).
 
 
-leftDiagonal(X,Y) :- available(X,Y) & coincide(X+1,Y-1,X+2,Y-2).
-leftDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y+1,X+1,Y+1).
-leftDiagonal(X,Y) :- available(X,Y) & coincide(X-1,Y+1,X-2,Y+2).
-
-// Winning position
-winpos(X,Y) :- horizontal(X,Y) & (my_piece(X,Y+1) | my_piece(X,Y-1)).
-winpos(X,Y) :- vertical(X,Y) & (my_piece(X+1,Y) | my_piece(X-1,Y)).
-winpos(X,Y) :- rightDiagonal(X,Y) & (my_piece(X+1,Y+1) | my_piece(X-1,Y-1)).
-winpos(X,Y) :- leftDiagonal(X,Y) & (my_piece(X+1,Y-1) | my_piece(X-1,Y+1)).
-// Losing position
-savepos(X,Y) :- horizontal(X,Y) & (opponent_piece(X,Y+1) | opponent_piece(X,Y-1)).
-savepos(X,Y) :- vertical(X,Y) & (opponent_piece(X+1,Y) | opponent_piece(X-1,Y)).
-savepos(X,Y) :- rightDiagonal(X,Y) & (opponent_piece(X+1,Y+1) | opponent_piece(X-1,Y-1)).
-savepos(X,Y) :-leftDiagonal(X,Y) & (opponent_piece(X+1,Y-1) | opponent_piece(X-1,Y+1)).
-
-
-// Starting the agent
 started.
+
+/* Plans */
 
 /* When the agent is started, perform the 'sayHello' action. */
 +started <- sayHello.
@@ -133,33 +118,28 @@ started.
 /* Whenever it is my turn, look for winning positions. If there are none, look for positions
  to avoid a loss, and if there are none either, play if possible (in this order of preference): 
  middle, corner, edge.*/
-+round(Z) : next <- !playWin. 
 
-// Look for winning positions
-+!playWin <- .findall(winpos(X,Y), winpos(X,Y), PossibleWins);
++round(Z) : next <- .findall(win(X,Y), win(X,Y), PossibleWins);
 					N_winners = .length(PossibleWins);
 					if (N_winners > 0) {
-						.print("I see a winning movement!");
-						.nth(0, PossibleWins, winpos(A,B));
+						.print("I see a possible win!");
+						.nth(0, PossibleWins, win(A,B));
 						play(A,B)}
 					else {!playSafe}.
 
-// Look for positions to avoid a loss
-+!playSafe <- .findall(savepos(X,Y), savepos(X,Y), PossibleSaves);
++!playSafe <- .findall(saver(X,Y), saver(X,Y), PossibleSaves);
 			  N_savers = .length(PossibleSaves);
 			  if (N_savers > 0) {
 				  .print("I see a possible loss!");
-				  .nth(0, PossibleSaves, savepos(A,B));
+				  .nth(0, PossibleSaves, saver(A,B));
 				  play(A,B)}
-			else {!playMiddle;}.
-
-// Play in the middle if possible					
+			else {!playMiddle}.
+					
 +!playMiddle <- if (available(1,1)){
 					play(1,1);
 				.print("Middle was available!")}
 				else {!playCorner}.
 
-// Play in a corner if possible
 +!playCorner <- if (available(0,0)) {play(0,0)} else{
 	if (available(2,0)) {play(2,0)} else{
 	if (available(0,2)) {play(0,2)} else{
@@ -167,16 +147,13 @@ started.
 	!playEdge
 	}}}}.
 
-// Play in an edge if possible. This should always be possible
 +!playEdge <- if (available(1,0)) {play(1,0)} else{
 	if (available(0,1)) {play(0,1)} else{
 	if (available(2,1)) {play(2,1)} else{
-	if (available(1,2)) {play(1,2)} else{
-	.print("Something unexpected occurred!")	
-	}}}}.
+	if (available(1,2)) {play(1,2)} }}}.
 
 						 
-/* If I am the winner, then print "Supreme victory!"  */
-+winner(S) : symbol(S) <- .print("Supreme victory!").
+/* If I am the winner, then print "I won!"  */
++winner(S) : symbol(S) <- .print("I won!").
 
 +end <- confirmEnd.
