@@ -104,27 +104,27 @@ started.
 
 // Look for winning positions
 +!playWin <- .findall(winpos(X,Y), winpos(X,Y), PossibleWins);
-					N_winners = .length(PossibleWins);
-					if (N_winners > 0) {
-						.print("I see a winning movement!");
-						.nth(0, PossibleWins, winpos(A,B));
-						play(A,B)}
-					else {!playSafe}.
+	N_winners = .length(PossibleWins);
+	if (N_winners > 0) {
+		.print("I see a winning movement!");
+		.nth(0, PossibleWins, winpos(A,B));
+		play(A,B)}
+	else {!playSafe}.
 
 // Look for positions to avoid a loss
 +!playSafe <- .findall(savepos(X,Y), savepos(X,Y), PossibleSaves);
-			  N_savers = .length(PossibleSaves);
-			  if (N_savers > 0) {
-				  .print("I see a possible loss!");
-				  .nth(0, PossibleSaves, savepos(A,B));
-				  play(A,B)}
-			else {!playMiddle;}.
+	N_savers = .length(PossibleSaves);
+	if (N_savers > 0) {
+		.print("I see a possible loss!");
+		.nth(0, PossibleSaves, savepos(A,B));
+		play(A,B)}
+	else {!playMiddle;}.
 
 // Play in the middle if possible					
 +!playMiddle <- if (available(1,1)){
-					play(1,1);
-				.print("Middle was available!")}
-				else {!playCorner}.
+	play(1,1);
+	.print("Middle was available!")}
+	else {!playCorner}.
 
 // Play in a corner if possible
 +!playCorner <- if (available(0,0)) {play(0,0)} else{
